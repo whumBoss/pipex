@@ -6,25 +6,17 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 19:24:55 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/01/16 21:59:07 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/01/21 15:24:33 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define PIPEX_H
-# ifndef PIPEX_H
+#ifndef PIPEX_H
+# define PIPEX_H
 
 //Les bibliotheques
-#include <stdio.h>
-#include <unistd.h>
+# include <stdio.h>
+# include <unistd.h>
 # include "libft/libft.h"
-
-//Mes fonctions
-struct commandes	parsing(int argc, char **argv, char **envp);
-struct commandes	create_node(char *cmd, char *flag, char *path);
-char	**isoler_path(char **envp);
-char	*find_path(char *cmd, char **envp);
-int		index_strchr(char *str, int c);
-void	pipex(int argc, char **argv, char envp);
 
 // definir ma structure pipex
 // elle vas contenir toutes les variable necessaires 
@@ -42,11 +34,26 @@ void	pipex(int argc, char **argv, char envp);
 // commande et ses flag splitee
 // path
 // pointer sur la prochaine commande
-typedef struct commandes
+typedef struct s_commandes
 {
 	char				**cmd_flags;
 	char				*path;
-	struct commandes	*next;
-} commandes;
+	struct s_commandes	*next;
+} t_commandes;
+
+//Mes fonctions
+t_commandes	*parsing_struct_cmd(int argc, char **argv, char **envp);
+t_commandes	*create_node(char *cmd, char *path);
+char	**isoler_path(char **envp);
+char	*find_path(char *cmd, char **envp);
+//int		index_strchr(char *str, int c);
+//void	pipex(int argc, char **argv, char envp);
+void	print_list(t_commandes *list_cmd);
+void	push_back(t_commandes **head, char *cmd, char *path);
+
+
+
+
+
 
 #endif

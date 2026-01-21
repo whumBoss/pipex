@@ -6,32 +6,31 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 18:43:09 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/01/16 21:49:29 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/01/21 18:27:58 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	pipex(int argc, char **argv, char **envp)
+void	print_list(t_commandes *list_cmd)
 {
-	if (argc > 1)
+	int	i = 0;
+	while (list_cmd && i != 1)
 	{
-		//char	*path = find_path(argv[1], envp);
-		//char	**cmd = ft_split(argv[1], ' ');
-		// ASSIGNER MES COMMANDES DANS UNE LISTE CHAINEE
-		parsing(argc, argv, envp);
-		// EXECUTER UNE COMMANDE SHELL
-		execve(path, cmd, envp);
+		printf("Flags: ");
+		for (int i = 0; list_cmd->cmd_flags[i]; i++)
+			printf("[%s] ", list_cmd->cmd_flags[i]);
+		printf("\n");
+		printf("Path: %s\n", list_cmd->path);
+		i++;
 	}
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	// int i = 0;
-	// while (envp[i])
-	// {
-	// 	printf("%s\n", envp[i]);
-	// 	i++;
-	// }
-	pipex(argc, argv, envp);
+	t_commandes		*head = NULL;
+
+	head = parsing_struct_cmd(argc, argv, envp);
+	print_list (head);
+	return (0);
 }
