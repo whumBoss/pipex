@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 19:24:55 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/01/21 15:24:33 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/02/04 19:00:46 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,22 @@ typedef struct s_commandes
 	struct s_commandes	*next;
 } t_commandes;
 
-//Mes fonctions
-t_commandes	*parsing_struct_cmd(int argc, char **argv, char **envp);
-t_commandes	*create_node(char *cmd, char *path);
+typedef struct s_arguments
+{
+	char	*infile;
+	char	*outfile;
+	int		nb_cmd;
+} t_arguments;
+
+//NODE.c
 char	**isoler_path(char **envp);
-char	*find_path(char *cmd, char **envp);
-//int		index_strchr(char *str, int c);
-//void	pipex(int argc, char **argv, char envp);
 void	print_list(t_commandes *list_cmd);
 void	push_back(t_commandes **head, char *cmd, char *path);
+char	*find_path(char *cmd, char **envp);
+t_commandes	*create_node(char *cmd, char *path);
+
+//Parsing.c
+void	parsing_struct_cmd(int argc, char **argv, char **envp, t_commandes **head);
 
 
 

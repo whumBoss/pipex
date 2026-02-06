@@ -16,13 +16,13 @@ OBJS = $(SRCS:%.c=%.o)
 all: $(NAME)
 
 $(NAME): $(LIB) $(OBJS)
-	$(CC) $(INCLUDE) $(OBJS) $(LIB) -o $(NAME)
+	$(CC) $(OBJS) $(LIB) -o $(NAME)
 
 $(LIB):
 	make -C $(DIR_LIB)
 
 %.o: %.c
-	$(CC) $(INCLUDE) $(CFLAGS)  -o $@ -c $<
+	$(CC) $(CFLAGS)  -o $@ -c $<
 
 clean:
 	rm -f $(OBJS)

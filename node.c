@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 20:06:36 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/01/21 18:30:10 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/02/04 18:47:25 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,34 +27,32 @@ t_commandes	*create_node(char *cmd, char *path)
 void	push_back(t_commandes **head, char *cmd, char *path)
 {
 	t_commandes		*new_node;
-	t_commandes		*buffer_current;
+	t_commandes		*current;
 	
 	new_node = create_node(cmd, path);
-	printf("DEBUG: head = %p, *head = %p\n", head, *head);
 	if (*head == NULL)
 	{
 		*head = new_node;
 		return;
 	}
-	buffer_current = *head;
-	while (buffer_current->next != NULL)
-		buffer_current = buffer_current->next;
-	buffer_current->next = new_node;
+	current = *head;
+	while (current->next != NULL)
+		current = current->next;
+	current->next = new_node;
 }
 
-// int		index_strchr(char *str, int c)
-// {
-// 	int	j;
-	
-// 	j = 0;
-// 	while (str[j])
-// 	{
-// 		if(str[j] == c)
-// 			return (j);
-// 		j++;
-// 	}
-// 	return (0);
-// }
+void	print_list(t_commandes *list_cmd)
+{
+	while (list_cmd)
+	{
+		printf("Flags: ");
+		for (int i = 0; list_cmd->cmd_flags[i]; i++)
+			printf("[%s] ", list_cmd->cmd_flags[i]);
+		printf("\n");
+		printf("Path: %s\n", list_cmd->path);
+		list_cmd = list_cmd->next;
+	}
+}
 
 char	**isoler_path(char **envp)
 {

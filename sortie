@@ -1,0 +1,17 @@
+total 88
+-rwxr-xr-x 1 wihumeau 2025_paris 16336 Feb  4 21:21 a.out
+-rw-r--r-- 1 wihumeau 2025_paris   446 Jan 21 15:36 bazar.c
+drwxr-xr-x 2 wihumeau 2025_paris  4096 Feb  4 18:14 libft
+-rw-r--r-- 1 wihumeau 2025_paris   558 Feb  4 18:14 Makefile
+-rw-r--r-- 1 wihumeau 2025_paris  2691 Feb  4 18:47 node.c
+-rw-r--r-- 1 wihumeau 2025_paris  5720 Feb  4 18:43 node.o
+-rw-r--r-- 1 wihumeau 2025_paris     0 Feb  4 19:10 out
+-rw-r--r-- 1 wihumeau 2025_paris   112 Feb  4 19:44 outfile
+-rw-r--r-- 1 wihumeau 2025_paris  1743 Feb  4 19:31 parsing.c
+-rw-r--r-- 1 wihumeau 2025_paris  3024 Feb  4 18:44 parsing.o
+-rwxr-xr-x 1 wihumeau 2025_paris 19864 Feb  4 18:44 pipex
+-rw-r--r-- 1 wihumeau 2025_paris  1266 Feb  4 19:59 pipex.c
+-rw-r--r-- 1 wihumeau 2025_paris  1959 Feb  4 19:00 pipex.h
+-rw-r--r-- 1 wihumeau 2025_paris  3776 Feb  4 18:40 pipex.o
+-rw-r--r-- 1 wihumeau 2025_paris     0 Feb  4 21:21 sortie
+-rw-r--r-- 1 wihumeau 2025_paris   277 Feb  4 21:21 test.c
