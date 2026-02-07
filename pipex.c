@@ -6,19 +6,19 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 18:43:09 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/02/06 22:00:40 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/02/07 17:25:37 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	child1(t_arguments pipex)
+int	child(char *path, char **cmd, char **envp)
 {
-	int	pid1 = fork()
+	int	pid = fork()
 	
-	if (pid1 == 0)
+	if (pid == 0)
 	{
-		if (!execve(pipex.path1, cmd1, envp))
+		if (!execve(path, cmd, envp))
 		{
 			ft_printf("Erreur pipex : %s\n", errno);
 		}
@@ -26,48 +26,38 @@ int	child1(t_arguments pipex)
 	}
 	return (0);
 }
-int	child2(t_arguments pipex)
-{
-	int	pid2 = fork()
-	
-	if (pid2 == 0)
-	{
-		if (!execve(pipex.path2, cmd2, envp))
-		{
-			ft_printf("Erreur pipex : %s\n", errno);
-		}
-		return (1);
-	}
-	return (0);
-}
-void	parent(t_arguments pipex)
+char	**file_check(char *file, char **cmd, char *flag)
 {
 	//TEST INFILE VALIDE? SINON PAS CMD1
-	int	fd_infile = open(argv[1], O_RDONLY);
-	if (fd_infile < 0)
+	int	fd = open(file, flag);
+	if (file < 0)
 	{
-		fd_infile = open("dev/null");
-		pipex.cmd1 = NULL;
+		fd = open("dev/null", flag);
+		cmd = NULL;
 		ft_printf("Erreur pipex : %s\n", errno);
 	}
-	
-	//TEST OUTFILE VALIDE? SINON PAS CMD2
-	int	fd_outfile = open(pipex.outfile, O_WRONLY | O_CREATE | O_TRUNC);
-	if (fd_outfile < 0)
-	{
-		fd_outfile = open(dev/null);
-		pipex.cmd2 = NULL;
-		ft_printf("Erreur pipex : %s\n", errno);
-	}
+	//RETURN LA CMD1 POUR L'UTILISER DANS LES CONDITIONS SUIVANTES
+	return (cmd);
+}
+
+void	parent(t_arguments pipex)
+{
+	//TEST INFILE VALIDE, SI INVALIDE CMD1 ASSIGNER A NULL
+	pipex.cmd1 = file_check(pipex.infile, pipex.cmd1, O_RDONLY);
 	
 	//REDIRECTION POUR QUE CHILD1 LISE DANS INFILE
 	dup2(fd_infile, STDINFILENO);
 	close(fd_infile);
 	
+	//TEST OUTFILE VALIDE, SI INVALIDE CMD2 ASSIGNER A NULL
+	pipex.cmd2 = file_check(pipex.outfile, pipex.cmd2, O_WRONLY);
+	
 	//CREATION DU PIPE
 	int	p[2];
-	pipe(p);
-	//verif retour de pipe si c > 0 c'est ok
+	if (pipe(p) < 0) //< ou <=???????
+	{
+		ft_printf("Erreur pipex, creation du pipe : %d\n", errno);
+	}
 	
 	//VERIF SI IL Y A DES CMD A EXECUTER
 	if (pipex.cmd1 == NULL && pipex.cmd2 == NULL)
@@ -75,6 +65,7 @@ void	parent(t_arguments pipex)
 		ft_printf("Erreur pipex : aucune commande a executer\n");
 		return ;
 	}
+	
 	//EXECUTION DE LA CMD1 SI LE INFILE EST VALIDE
 	if (pipex.cmd1 != NULL)
 	{
@@ -82,7 +73,7 @@ void	parent(t_arguments pipex)
 		dup2(p[1], STDOUTFILENO);
 		close(p[1]);
 		//EXECUTION CMD1
-		child1(pipex);
+		child(pipex.path1, pipex.cmd1, pipex.envp);
 		//EXECUTION DE LA CMD2 SI LE INFILE ET OUTFILE EST VALIDE
 		if (pipex.cmd2 != NULL)
 		{
@@ -93,7 +84,7 @@ void	parent(t_arguments pipex)
 			dup2(fd_outfile, STDOUTFILENO);
 			close(fd_outfile);
 			//EXECUTION CMD2
-			child2(pipex);
+			child(pipex.path2, pipex.cmd2, pipex.envp);
 		}
 	}
 	//EXECUTION CMD2 SI LE OUTFILE EST VALIDE ET LE INFILE INVALIDE
@@ -103,44 +94,33 @@ void	parent(t_arguments pipex)
 		dup2(fd_outfile, STDOUTFILENO);
 		close(fd_outfile);
 		//EXECUTION CMD2
-		child2(pipex);
+		child(pipex.path2, pipex.cmd2, pipex.envp);
 	}
+	//fonction close all pour fermer tout les fd
+	//BESOIN DE MALLOC LES STRING DANS LE TABLEAU
+	//FONCTION POUR FREE TOUT : IDENTIFIFIER LES CAS D'ERREUR ET APPELLER LES FONCTIONS FREE DANS CES CAS PRECIS
 }
-t_arguments	parsing(char **argv, char **envp)
-{
-	t_arguments	pipex;
-	
-	pipex.infile = argv[1];
-	pipex.outfile = argv[4];
-	pipex.cmd1 = ft_split(argv[2]);
-	pipex.cmd2 = ft_split(argv[3]);
-	pipex.path1 = find_path(pipex.cmd1[0]);
-	pipex path2 = find_path(pipex.cmd2[0]);
-	pipex.envp = envp;
-	
-	return (pipex);
-}
+
 int	main(int argc, char **argv, char **envp)
 {
 	if (argc == 5)
 	{
 		t_arguments	pipex;
 		
-		pipex = parsing(argv, envp);
+		pipex.infile = "infile.txt";
+		pipex.outfile = "outfile.txt";
+		pipex.cmd1 = {"cat", "-e", NULL};
+		pipex.cmd2 = {"echo", NULL};
+		pipex.path1 = "/usr/bin/cat";
+		pipex path2 = "/usr/bin/echo";
+		pipex.envp = envp;
+		//pipex = parsing(argv, envp);
 		parent(pipex);
 	}
 	else
-		printf("Erreur pipex : trop ou manque d'arguments\n");
+		ft_printf("Erreur pipex : trop ou manque d'arguments\n");
 	return (0);
 }
-// {
-// 	t_commandes		*head = NULL;
-
-// 	parsing_struct_cmd(argc, argv, envp, &head);
-// 	print_list (head);
-// 	return (0);
-//}
-
 
 // CAS LIMITES
 // < infileNonexist cat | ls > outfileExist  || Deuxieme commande executer

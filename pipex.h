@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 19:24:55 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/02/04 19:00:46 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/02/07 17:34:08 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,51 +16,37 @@
 //Les bibliotheques
 # include <stdio.h>
 # include <unistd.h>
+# include <errno.h>
+# include <fcntl.h>
+# include <stdlib.h>
 # include "libft/libft.h"
+# include "ft_print/ft_printf.h"
 
 // definir ma structure pipex
 // elle vas contenir toutes les variable necessaires 
-// mon infile, mon outfile, infile fd, mon nb de cmd
-// typedef struct arguments
-// {
-// 	char	*infile;
-// 	char	*outfile;
-// 	int		nb_cmd;
-// 	int		infile_fd;
-// 	int		outfile_fd;
-// } arguments;
-
-// definir une structure commande liste chainee 
-// commande et ses flag splitee
-// path
-// pointer sur la prochaine commande
-typedef struct s_commandes
-{
-	char				**cmd_flags;
-	char				*path;
-	struct s_commandes	*next;
-} t_commandes;
-
+// mon infile, mon outfile...
 typedef struct s_arguments
 {
 	char	*infile;
 	char	*outfile;
-	int		nb_cmd;
+	int		fd_infile;
+	int		fd_outfile;
+	char	**cmd1;
+	char	**cmd2;
+	char	*path1;
+	char	*path2;
+	char	**envp;
 } t_arguments;
-
-//NODE.c
-char	**isoler_path(char **envp);
-void	print_list(t_commandes *list_cmd);
-void	push_back(t_commandes **head, char *cmd, char *path);
-char	*find_path(char *cmd, char **envp);
-t_commandes	*create_node(char *cmd, char *path);
 
 //Parsing.c
 void	parsing_struct_cmd(int argc, char **argv, char **envp, t_commandes **head);
+t_arguments	parsing(char **argv, char **envp);
+char	**isoler_path(char **envp);
+char	*find_path(char *cmd, char **envp);
 
-
-
-
-
+//Pipex.c
+void	parent(t_arguments pipex);
+int	child(char *path, char **cmd, char **envp);
+char	**file_check(char *file, char **cmd);
 
 #endif

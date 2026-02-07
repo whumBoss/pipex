@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 20:06:36 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/02/04 18:47:25 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/02/07 16:59:10 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,44 +53,46 @@ void	print_list(t_commandes *list_cmd)
 		list_cmd = list_cmd->next;
 	}
 }
-
-char	**isoler_path(char **envp)
+//ANCIEN PARSING LIST CHAINEE
+void	parsing_struct_cmd(int argc, char **argv, char **envp, t_commandes **head)
 {
-	int	i = 0;
-	int	len = 0;
-
-	while (envp[i])
-	{
-		len = ft_strlen(envp[i]);
-		if (ft_strnstr(envp[i], "PATH=/home", len))
-		{
-			// char	*variable_PATH = ft_strnstr(envp[i], "PATH=/home", len);
-			// int		ic = index_strchr(variable_PATH, '/');
-			char	**variable_PATH = ft_split(envp[i], '=');
-			//char	*chemins_variable = ft_substr(variable_PATH, ic, 100);
-			char	**chemins_tableau = ft_split(variable_PATH[1], ':');
-			free(variable_PATH);
-			return (chemins_tableau);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
-char	*find_path(char *cmd, char **envp)
-{
-	int		i = 0;
-	char	**chemins_tableau = isoler_path(envp);
-	char	**cmd_and_flags = ft_split(cmd, ' ');
-	char	*cmd_complete = ft_strjoin("/", cmd_and_flags[0]);
+	//verif si le argv[1] est valable(fd)
 	
-	while (chemins_tableau[i])
+	//verif si argv[2] c'est le chemin et la cmd ou juste la cmd	
+	char			*path = NULL;
+	int				i;
+	
+	i = 1;
+	while (i < argc)
 	{
-		char	*cmd_path = ft_strjoin(chemins_tableau[i], cmd_complete);
-		if (access(cmd_path, F_OK | X_OK) == 0)
-			return cmd_path;
-		free(cmd_path);
+		path = find_path(argv[i], envp);
+		push_back(head, argv[i], path);
 		i++;
 	}
-	return (NULL);
 }
+//ANCIEN MAIN PIPEX.BONUS
+// {
+// 	t_commandes		*head = NULL;
+
+// 	parsing_struct_cmd(argc, argv, envp, &head);
+// 	print_list (head);
+// 	return (0);
+//}
+
+
+// // ANCIEN .H DECLARATION DES STRUCT CHAINEES
+// // definir une structure commande liste chainee 
+// // commande et ses flag splitee
+// // path
+// // pointer sur la prochaine commande
+// typedef struct s_commandes
+// {
+// 	char				**cmd_flags;
+// 	char				*path;
+// 	struct s_commandes	*next;
+// } t_commandes;
+
+// //NODE.c
+// void	print_list(t_commandes *list_cmd);
+// void	push_back(t_commandes **head, char *cmd, char *path);
+// t_commandes	*create_node(char *cmd, char *path);

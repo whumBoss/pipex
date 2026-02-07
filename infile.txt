@@ -1,0 +1,1 @@
+copier le infile dans le outfile!
