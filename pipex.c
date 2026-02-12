@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 18:43:09 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/02/07 17:25:37 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/02/12 20:32:01 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	child(char *path, char **cmd, char **envp)
 	}
 	return (0);
 }
+
 char	**file_check(char *file, char **cmd, char *flag)
 {
 	//TEST INFILE VALIDE? SINON PAS CMD1
