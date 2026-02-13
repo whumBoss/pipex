@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 19:39:35 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/02/07 14:51:47 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/02/13 17:56:18 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ char	**isoler_path(char **envp)
 
 char	*find_path(char *cmd, char **envp)
 {
+	//SI IL Y A PAS DE CMD, ASSIGNER PATH A NULL
+	if (!cmd)
+		return (NULL);
+	//SINON ASSIGNER LE PATH
 	int		i = 0;
 	char	**chemins_tableau = isoler_path(envp);
 	char	**cmd_and_flags = ft_split(cmd, ' ');
@@ -53,45 +57,40 @@ char	*find_path(char *cmd, char **envp)
 	return (NULL);
 }
 
+char	**file_check(int fd, char *arg, int flag)
+{
+	char	**cmd;
+	//TEST SI INFILE INVALIDE: PAS CMD1
+	if (fd < 0)
+	{
+		fd = open("dev/null", flag);
+		cmd = NULL;
+		ft_printf("Erreur pipex : %s\n", errno);
+	}
+	//SI INFILE VALIDE: ASSIGNER LA CMD1
+	else
+	{
+		cmd = ft_split(arg);
+	}
+	//RETURN LA CMD1 POUR L'UTILISER DANS LES CONDITIONS SUIVANTES
+	return (cmd);
+}
+
 t_arguments	parsing(char **argv, char **envp)
 {
 	t_arguments	pipex;
 	
-	pipex.infile = argv[1];
-	pipex.outfile = argv[4];
-	pipex.cmd1 = ft_split(argv[2]);
-	pipex.cmd2 = ft_split(argv[3]);
+	pipex.infile = argv[1]; //dup ou pas besoin?
+	pipex.outfile = argv[4];//dup ou pas besoin?
+	pipex.fd_infile = open(pipex.infile, O_RDONLY);
+	pipex.fd_outfile = open(pipex.outfile, O_WRONLY);
+	//VERIF LES FD ET ASSIGNER LES CMD
+	pipex.cmd1 = file_check(pipex.fd_infile, argv[2], O_RDONLY);
+	pipex.cmd2 = file_check(pipex.fd_outfile, argv[3], O_WRONLY);
+	//VERIF SI !CMD POUR ASSIGNER OU PAS LES PATH
 	pipex.path1 = find_path(pipex.cmd1[0]);
 	pipex path2 = find_path(pipex.cmd2[0]);
 	pipex.envp = envp;
 	
 	return (pipex);
-}
-
-t_arguments	assign_structure_arg(int argc, char **argv, char **envp)
-{
-	//Verif mes arg
-	if (argc < 5)
-	{
-		printf("Erreur pipex pas assez d'arguments: %s\n", strerror(errno));
-		return (NULL);
-	}
-	
-	//creer la structure
-	struct t_arguments	arg;
-	
-	//Tester mon infile
-	int	fd;
-	
-	fd = open(arg.infile, O_RDONLY);
-	if (fd < 0)
-	
-
-	//Tester mon outfile
-	
-	//Assigner ma structure pipex
-	
-	arg.infile = argv[1];
-	arg.outfile = argv[argc -1];
-	arg.nb_cmd = argc - 3;
 }

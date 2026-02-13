@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 20:42:46 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/02/12 20:42:50 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/02/13 18:18:02 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ typedef struct s_arguments
 {
 	char	*infile;
 	char	*outfile;
+	int		inflie_flag;
+	int		outfile_flag;
 	int		fd_infile;
 	int		fd_outfile;
 	char	**cmd1;
@@ -39,14 +41,13 @@ typedef struct s_arguments
 } t_arguments;
 
 //Parsing.c
-void	parsing_struct_cmd(int argc, char **argv, char **envp, t_commandes **head);
 t_arguments	parsing(char **argv, char **envp);
 char	**isoler_path(char **envp);
 char	*find_path(char *cmd, char **envp);
+char	**file_check(int fd, char *arg, int flag);
 
 //Pipex.c
 void	parent(t_arguments pipex);
 int	child(char *path, char **cmd, char **envp);
-char	**file_check(char *file, char **cmd);
 
 #endif
