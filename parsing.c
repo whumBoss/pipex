@@ -6,11 +6,14 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 19:39:35 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/02/22 18:01:58 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/02/22 21:31:08 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+//valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes ./pipex infile.txt "/bin/ls" "/bin/cat" outfile.txt
+
 
 // char	*variable_PATH = ft_strnstr(envp[i], "PATH=/home", len);
 // int		ic = index_strchr(variable_PATH, '/');
