@@ -12,7 +12,7 @@ INCLUDE = -I. #prend les .h dans le dossier courrant ou en deux variable une pou
 
 SRCS = pipex.c \
 parsing.c \
-node.c \
+pipex_utils.c \
 
 OBJS = $(SRCS:%.c=%.o)
 

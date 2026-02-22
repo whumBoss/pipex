@@ -1,15 +1,14 @@
-#include <unistd.h>  // for close() and STDIN_FILENO
-#include <stdio.h>   // for printf()
+#include <stdio.h>
+#include <errno.h>
+#include <fcntl.h>
 
-int main() {
-    printf("Before closing stdin...\n");
-    close(STDIN_FILENO);
-    printf("After closing stdin!\n");
+int main(void)
+{
+    int fd;
     
-    // Now try reading from stdin - what happens?
-    char c;
-	int	returning;
-    returning = read(STDIN_FILENO, &c, 1); // or use getchar()
-    printf("%d\n", returning);
+    fd = open("file_that_doesnt_exist.txt", O_RDONLY);
+    printf("fd = %d\n", fd);
+    printf("errno = %d\n", errno);
+    printf("errno = %s\n", errno);
     return 0;
 }

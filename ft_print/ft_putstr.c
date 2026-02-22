@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 18:50:11 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/01/01 20:23:39 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/02/15 17:12:27 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,5 @@ int	ft_putstr(char *s)
 		return (ft_putstr("(null)"));
 	while (s[i])
 		i++;
-	return (write(1, s, i));
+	return (write(2, s, i));
 }
