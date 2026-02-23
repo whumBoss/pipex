@@ -1,21 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   pipex_free.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/14 18:53:44 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/02/22 17:52:18 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/02/23 21:19:44 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+void	free_paths(char **cmd_complete, char ***chemins_tableau)
+{
+	free(&cmd_complete);
+	free_tab(&chemins_tableau);
+}
+
 void	free_tab(char **tab)
 {
-	int	i = 0;
+	int	i;
 
+	i = 0;
 	while (tab[i])
 	{
 		free(tab[i]);
@@ -37,22 +44,22 @@ void	free_tab(char **tab)
 // 	free(double_tab);
 // }
 
-void	free_all(t_arguments pipex)
+void	free_all(t_arguments *pipex)
 {
-	if (pipex.cmd[0])
-		free_tab(pipex.cmd[0]);
-	if (pipex.cmd[1])
-		free_tab(pipex.cmd[1]);
-	if (pipex.path[0])
-		free(pipex.path[0]);
-	if (pipex.path[1])
-		free(pipex.path[1]);
+	if (pipex->cmd[0])
+		free_tab(pipex->cmd[0]);
+	if (pipex->cmd[1])
+		free_tab(pipex->cmd[1]);
+	if (pipex->path[0])
+		free(pipex->path[0]);
+	if (pipex->path[1])
+		free(pipex->path[1]);
 }
 
-void	close_files(t_arguments pipex)
+void	close_files(t_arguments *pipex)
 {
-	close(pipex.fd_infile);
-	close(pipex.fd_outfile);
+	close(pipex->fd_infile);
+	close(pipex->fd_outfile);
 }
 
 void	close_pipe(int p[2])

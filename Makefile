@@ -7,12 +7,13 @@ DIR_PRTF = ft_print/
 PRTF = $(DIR_PRTF)libftprintf.a
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -g3 
 INCLUDE = -I. #prend les .h dans le dossier courrant ou en deux variable une pour le cemin et une pour le flag
 
 SRCS = pipex.c \
 parsing.c \
-pipex_utils.c \
+pipex_free.c \
+pipex_error.c
 
 OBJS = $(SRCS:%.c=%.o)
 
