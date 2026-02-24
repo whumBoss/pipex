@@ -6,16 +6,16 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/14 18:53:44 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/02/24 15:53:08 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/02/24 19:28:20 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	free_paths(char **cmd_complete, char ***chemins_tableau)
+void	free_paths(char **complete_cmd, char ***path_tab)
 {
-	free(&cmd_complete);
-	free_tab(&chemins_tableau);
+	free(*complete_cmd);
+	free_tab(*path_tab);
 }
 
 void	free_tab(char **tab)
@@ -45,8 +45,10 @@ void	free_all(t_arguments *pipex)
 
 void	close_files(t_arguments *pipex)
 {
-	close(pipex->fd_infile);
-	close(pipex->fd_outfile);
+	if (pipex->fd_infile != -1)
+		close(pipex->fd_infile);
+	if (pipex->fd_outfile != -1)
+		close(pipex->fd_outfile);
 }
 
 void	close_pipe(int p[2])
