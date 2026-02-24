@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 19:39:35 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/02/23 20:58:27 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/02/24 16:02:46 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 // 	ft_printf("%s\n", chemins_tableau[i]);
 // }
 
-char	**isoler_path(char **envp)
+char	**isoler_path(char **envp, t_arguments *pipex)
 {
 	int		i;
 	int		len;
@@ -37,10 +37,10 @@ char	**isoler_path(char **envp)
 		{
 			variable_path = ft_split(envp[i], '=');
 			if (variable_path == NULL)
-				erreur_path();
+				erreur_path(&pipex);
 			chemins_tableau = ft_split(variable_path[1], ':');
 			if (chemins_tableau == NULL)
-				erreur_path();
+				erreur_path(&pipex);
 			free_tab(variable_path);
 			return (chemins_tableau);
 		}
@@ -56,7 +56,7 @@ char	**isoler_path(char **envp)
 // {
 // free_tab(chemins_tableau);
 
-char	*find_path(char **cmd, char **envp)
+char	*find_path(char **cmd, char **envp, t_arguments *pipex)
 {
 	int		i;
 	char	**chemins_tableau;
@@ -64,7 +64,7 @@ char	*find_path(char **cmd, char **envp)
 	char	*cmd_path;
 
 	i = 0;
-	chemins_tableau = isoler_path(envp);
+	chemins_tableau = isoler_path(envp, &pipex);
 	if (cmd == NULL)
 		return (NULL);
 	cmd_complete = ft_strjoin("/", cmd[0]);
@@ -88,7 +88,7 @@ char	*find_path(char **cmd, char **envp)
 //SI INFILE VALIDE: ASSIGNER LA CMD1
 //RETURN LA CMD1 POUR L'UTILISER DANS LES CONDITIONS SUIVANTES
 
-char	**file_check(int fd, char *arg, int flag)
+char	**file_check(int fd, char *arg, int flag, t_arguments *pipex)
 {
 	char	**cmd;
 
@@ -104,7 +104,7 @@ char	**file_check(int fd, char *arg, int flag)
 		{
 			cmd = ft_split(arg, ' ');
 			if (cmd == NULL)
-				erreur_path();
+				erreur_path(&pipex);
 		}
 	}
 	return (cmd);
@@ -127,10 +127,10 @@ int	parsing(t_arguments *pipex, char **argv, char **envp)
 			O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (pipex->fd_outfile < 0)
 		printf("Erreur pipex, fd_outfile: %s\n", strerror(errno));
-	pipex->cmd[0] = file_check(pipex->fd_infile, argv[2], O_RDONLY);
-	pipex->cmd[1] = file_check(pipex->fd_outfile, argv[3], O_WRONLY);
-	pipex->path[0] = find_path(pipex->cmd[0], envp);
-	pipex->path[1] = find_path(pipex->cmd[1], envp);
+	pipex->cmd[0] = file_check(pipex->fd_infile, argv[2], O_RDONLY, &pipex);
+	pipex->cmd[1] = file_check(pipex->fd_outfile, argv[3], O_WRONLY, &pipex);
+	pipex->path[0] = find_path(pipex->cmd[0], envp, &pipex);
+	pipex->path[1] = find_path(pipex->cmd[1], envp, &pipex);
 	pipex->envp = envp;
 	return (0);
 }

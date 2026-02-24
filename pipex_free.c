@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/14 18:53:44 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/02/23 21:19:44 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/02/24 15:53:08 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,6 @@ void	free_tab(char **tab)
 	free(tab);
 }
 
-// void	free_double_tab(char ***double_tab)
-// {
-// 	int	j;
-
-// 	j = 0;
-// 	while (double_tab[j])
-// 	{
-// 		free_tab(double_tab[j]);
-// 		j++;
-// 	}
-// 	free(double_tab);
-// }
-
 void	free_all(t_arguments *pipex)
 {
 	if (pipex->cmd[0])
@@ -67,3 +54,16 @@ void	close_pipe(int p[2])
 	close(p[0]);
 	close(p[1]);
 }
+
+// void	free_double_tab(char ***double_tab)
+// {
+// 	int	j;
+
+// 	j = 0;
+// 	while (double_tab[j])
+// 	{
+// 		free_tab(double_tab[j]);
+// 		j++;
+// 	}
+// 	free(double_tab);
+// }
