@@ -1,8 +1,0 @@
-copier le infile dans le outfile!
-salut
-salut
-cava
-cava
-cava
-cava
-cava

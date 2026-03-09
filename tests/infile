@@ -1,0 +1,1 @@
+valgrind --leak-check=full./pipex infile.txt "ls" "wc -l" outfile.txt
