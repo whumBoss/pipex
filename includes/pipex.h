@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 20:42:46 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/03/10 20:58:22 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/03/10 21:25:27 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int		child(t_arg *pipex, t_cmd *cmd);
 
 //Free.c
 void	free_tab(char **tab);
-void	free_paths(char **complete_cmd, char ***path_tab); // pas necessaire le triple pointeur
+void	free_paths(char *complete_cmd, char **path_tab); // pas necessaire le triple pointeur
 void	freePipex(t_arg *pipex);
 void	freeCmd(t_cmd *cmd);
 

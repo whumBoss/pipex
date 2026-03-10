@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 17:37:34 by wissalhumea       #+#    #+#             */
-/*   Updated: 2026/03/09 16:32:25 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/03/10 21:25:54 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,13 @@ char	*findpath(char **cmd, t_arg *pipex)
 		cmd_path = ft_strjoin(path_tab[i], complete_cmd);
 		if (access(cmd_path, F_OK | X_OK) == 0)
 		{
-			free_paths(&complete_cmd, &path_tab);
+			free_paths(complete_cmd, path_tab);
 			return (cmd_path);
 		}
 		free(cmd_path);
 		i++;
 	}
-	free_paths(&complete_cmd, &path_tab);
+	free_paths(complete_cmd, path_tab);
 	return (NULL);
 }
 

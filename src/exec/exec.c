@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 18:10:50 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/03/10 20:49:40 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/03/10 21:21:43 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@
 faire une seule fonction child
 Le child 1 ecris dans le pipe[1] (2e case du tab)
 Le child 2 lis dans le pipe[0] (1e case du tab)
-utiliser un poiunteur vers la structure cmd
+utiliser un pointeur vers la structure cmd
 tjrs close avant de free
 pas besoin de condition pour execve
 utiliser closePipex pour TOUT close avant execve (les pipes n'etais pas close donc le child ne fini jamais, on wait dans le vide)
