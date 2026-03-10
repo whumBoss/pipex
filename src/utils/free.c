@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wissalhumeau <wissalhumeau@student.42.f    +#+  +:+       +#+        */
+/*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 21:18:11 by wissalhumea       #+#    #+#             */
-/*   Updated: 2026/03/09 18:36:19 by wissalhumea      ###   ########.fr       */
+/*   Updated: 2026/03/10 18:08:31 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,10 @@ void	freePipex(t_arg *pipex)
 	free(pipex->cmd1.path);
 	free(pipex->cmd2.path);
 	free(pipex);
+}
+
+void	freeCmd(t_cmd *cmd)
+{
+	free(cmd->path);
+	free_tab(cmd->args);
 }

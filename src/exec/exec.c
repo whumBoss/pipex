@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wissalhumeau <wissalhumeau@student.42.f    +#+  +:+       +#+        */
+/*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 18:10:50 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/03/09 20:34:52 by wissalhumea      ###   ########.fr       */
+/*   Updated: 2026/03/10 20:49:40 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,54 +66,57 @@
 		ON AFFECTE A STATUS LA VALEUR DE RETOUR DE LA DERNIERE COMMANDE RECU PAR WAITPID
 		ON RETURN
 		*/
-int		child2(t_arg *pipex, int tab_pid[2])
-{
-	pipex->cmd2.fdinput = pipex->pipe[1];
-	if (pipex->cmd1.fdinput < 0 || pipex->cmd1.fdoutput < 0)
-	{
-		freePipex(pipex);
-		close(pipex);
-		exit(1); // exit code pour ce cas d'erreur???
-	}
-	dup2(pipex->cmd2.fdinput, STDIN_FILENO);
-	close(pipex->cmd2.fdinput);
-	dup2(pipex->cmd2.fdoutput, STDOUT_FILENO);
-	close(pipex->cmd2.fdoutput);
-	if(execve(pipex->cmd2.path, pipex->cmd2.args, pipex->env) == -1);
-	{
-		freePipex(pipex);
-		closeChild2(pipex);
-		exit(errno); // exit code pour ce cas dérreur???
-	}
-	// est ce que je dois return une valeur jsp comment je fait pour recup le status?
-}
 
-int		child1(t_arg *pipex, int tab_pid[2])
+/* CORRECTION EXEC
+
+	child
+faire une seule fonction child
+Le child 1 ecris dans le pipe[1] (2e case du tab)
+Le child 2 lis dans le pipe[0] (1e case du tab)
+utiliser un poiunteur vers la structure cmd
+tjrs close avant de free
+pas besoin de condition pour execve
+utiliser closePipex pour TOUT close avant execve (les pipes n'etais pas close donc le child ne fini jamais, on wait dans le vide)
+
+	parent
+Modif la boucle waitpid pour recuperer uniquement le status du dernier child
+Macro qui verifi le status... Necessaire pour valider pipex ou peut attendre minishell??
+
+	general
+Verif si j'ai d'autres fonctions generique que je pourrais transformer en une
+Attention au utilisation de pointeur, notamment dans la fonction free_path, pas besoin de pointeur de pointeur de...
+/!\ TESTER CHAQUE FONCTION AVANT DE CONTINUER A CODER /!\
+*/
+
+int		child(t_arg *pipex, t_cmd *cmd)
 {
-	pipex->cmd1.fdoutput = pipex->pipe[0];
-	if (pipex->cmd1.fdinput < 0 || pipex->cmd1.fdoutput < 0)
+	if (cmd->args == pipex->cmd1.args)
+		cmd->fdoutput = pipex->pipe[1];
+	if (cmd->args == pipex->cmd2.args)
+		cmd->fdinput = pipex->pipe[0];
+	if (cmd->fdinput < 0 || cmd->fdoutput < 0)
 	{
+		closePipex(pipex);
+		closeCmd(cmd);
 		freePipex(pipex);
-		close(pipex);
+		freeCmd(cmd);
 		exit(1); // exit code pour ce cas d'erreur???
 	}
-	dup2(pipex->cmd1.fdinput, STDIN_FILENO);
-	close(pipex->cmd1.fdinput);
-	dup2(pipex->cmd1.fdoutput, STDOUT_FILENO);
-	close(pipex->cmd1.fdoutput);
-	if(execve(pipex->cmd1.path, pipex->cmd1.args, pipex->env) == -1);
-	{
-		freePipex(pipex);
-		closeChild1(pipex);
-		exit(errno); // exit code pour ce cas dérreur???
-	}
-	// est ce que je dois return une valeur jsp comment je fait pour recup le status?
+	dup2(cmd->fdinput, STDIN_FILENO);
+	dup2(cmd->fdoutput, STDOUT_FILENO);
+	closePipex(pipex);
+	closeCmd(cmd);
+	execve(cmd->path, cmd->args, pipex->env);
+	freePipex(pipex);
+	freeCmd(cmd);
+	exit(errno); // exit code pour ce cas d'erreur???
 }
 
 void	exec(t_arg *pipex)
 {
 	int		j = 0;
 	int		tab_pid[2];
+	int		status;
 
 	tab_pid[0] = -1;
 	tab_pid[1] = -1;
@@ -121,22 +124,26 @@ void	exec(t_arg *pipex)
 	if (pipe(pipex->pipe) < 0)
 	{
 		ft_printf("Pipex error, pipe creation : %s\n", strerror(errno));
+		closeFiles(pipex);
 		freePipex(pipex);
-		closeFiles(pipex)
 		exit(1);
 	}
 	tab_pid[0] = fork();
 	if (tab_pid[0] == 0)
-		child1(pipex, tab_pid);
+		child(pipex, &pipex->cmd1);
 	tab_pid[1] = fork();
 	if (tab_pid[1] == 0)
-		child2(pipex, tab_pid);
-	freePipex(pipex);
+		child(pipex, &pipex->cmd2);
 	closePipex(pipex);
-	while (j <= i)
+	freePipex(pipex);
+	while (j <= 1)
 	{
-		waitpid(tab_pid[j], &status, 0);
+		if (j == 1)
+			waitpid(tab_pid[j], &status, 0);
+		else
+			waitpid(tab_pid[j], NULL, 0);
 		j++;
 	}
+	// macro verif le status
 	exit(status);
 }

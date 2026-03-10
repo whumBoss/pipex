@@ -24,7 +24,7 @@ UTILS_DIR = src/utils/
 MAIN_FILES = main.c
 PARSING_FILES = parsing.c path.c
 EXEC_FILES = exec.c
-UTILS_FILES = free.c output.c utils.c
+UTILS_FILES = free.c output.c utils.c close.c
 
 # ===== Source / Object / Dependency Lists =====
 SRCS = \
