@@ -17,3 +17,6 @@ si cmd == " " ou "/"
 
 TEST VALEUR EXIT
 echo $?
+
+/* j'ai des invalid free, je ne comprend pas pk, peut etre une boucle qui boucle une fois de trop pour freetab et free le path j'ai pas compris*?
+/* aussi quand le infile est invalid les commande ne sont pas effectue, car les fd sont conciderer comme mauvais */

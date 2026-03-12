@@ -1,9 +1,0 @@
-total 56
--rw-r--r-- 1 wihumeau 2025_paris  6127 Mar 10 15:18 CHANGES.md
-drwxr-xr-x 3 wihumeau 2025_paris    37 Mar 10 15:18 includes
-drwxr-xr-x 2 wihumeau 2025_paris  4096 Mar 10 21:25 libft
--rw-r--r-- 1 wihumeau 2025_paris  1724 Mar 10 18:50 Makefile
-drwxr-xr-x 3 wihumeau 2025_paris    17 Mar 10 21:26 objs
--rwxr-xr-x 1 wihumeau 2025_paris 39200 Mar 10 21:26 pipex
-drwxr-xr-x 5 wihumeau 2025_paris    60 Mar 10 15:18 src
-drwxr-xr-x 2 wihumeau 2025_paris    35 Mar 10 15:18 tests

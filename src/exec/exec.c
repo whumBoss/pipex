@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 18:10:50 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/03/10 21:21:43 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/03/12 16:20:17 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,8 @@ int		child(t_arg *pipex, t_cmd *cmd)
 	closePipex(pipex);
 	closeCmd(cmd);
 	execve(cmd->path, cmd->args, pipex->env);
-	freePipex(pipex);
-	freeCmd(cmd);
+	freePipex(pipex); // invalid free
+	freeCmd(cmd); // invalid free
 	exit(errno); // exit code pour ce cas d'erreur???
 }
 
@@ -135,7 +135,7 @@ void	exec(t_arg *pipex)
 	if (tab_pid[1] == 0)
 		child(pipex, &pipex->cmd2);
 	closePipex(pipex);
-	freePipex(pipex);
+	freePipex(pipex); // 2 invalid free
 	while (j <= 1)
 	{
 		if (j == 1)
