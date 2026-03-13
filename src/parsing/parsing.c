@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tibras <tibras@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 18:09:30 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/03/12 16:48:18 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/03/13 16:02:41 by tibras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	**checkcmd(char *arg)
 		cmd = malloc(sizeof(char *)* 2);
 		if (!cmd)
 			return (NULL);
-		cmd[0] = arg;
+		cmd[0] = ft_strdup(arg);
 		cmd[1] = NULL;
 		return (cmd);
 	}
@@ -76,6 +76,8 @@ char	**checkcmd(char *arg)
 	return (cmd);
 }
 
+// SUR LES OPEN, BESOIN DE RENVOYER UN CODE ERREUR DE -1 CAR INFD = 2 ALORS QUE ERREUR
+// SAME POUR INFILE
 int		openoutfile(char *file)
 {
 	int		fd;
@@ -84,7 +86,7 @@ int		openoutfile(char *file)
 	if (fd == -1)
 	{
 		perror(file);
-		return (2);
+		return (-1);
 	}
 	return (fd);
 }
@@ -97,7 +99,7 @@ int		openinfile(char *file)
 	if (fd == -1)
 	{
 		perror(file);
-		return (1);
+		return (-1);
 	}
 	return (fd);
 }

@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 17:37:34 by wissalhumea       #+#    #+#             */
-/*   Updated: 2026/03/12 16:07:09 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/03/13 18:40:14 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,16 @@ char	*findpath(char **cmd, t_arg *pipex)
 
 char	*assignpath(char **cmd, t_arg *pipex)
 {
-	if (cmd[0] == NULL)
+	char	*path;
+
+	if (!cmd || cmd[0] == NULL)
 		return (NULL);
 	if (access(cmd[0], F_OK | X_OK) == 0)
-		return (cmd[0]);
-	return(findpath(cmd, pipex));
+	{
+		path = ft_strdup(cmd[0]);
+		if (!path)
+			return (NULL);
+		return (path);
+	}
+	return (findpath(cmd, pipex));
 }

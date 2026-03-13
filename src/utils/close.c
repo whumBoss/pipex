@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   close.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tibras <tibras@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 16:44:50 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/03/10 18:16:29 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/03/13 16:08:18 by tibras           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,28 @@
 
 void	closePipex(t_arg *pipex)
 {
-	close(pipex->cmd1.fdinput);
-	close(pipex->pipe[0]);
-	close(pipex->pipe[1]);
-	close(pipex->cmd2.fdoutput);
+	if (pipex->cmd1.fdinput >= 0)
+		close(pipex->cmd1.fdinput);
+	if (pipex->pipe[0] >= 0)
+		close(pipex->pipe[0]);
+	if (pipex->pipe[1] >= 0)
+		close(pipex->pipe[1]);
+	if (pipex->cmd2.fdoutput >= 0)
+		close(pipex->cmd2.fdoutput);
 }
 
 void	closeCmd(t_cmd *cmd)
 {
-	close(cmd->fdinput);
-	close(cmd->fdoutput);
+	if (cmd->fdinput >= 0)
+		close(cmd->fdinput);
+	if (cmd->fdoutput >= 0)
+		close(cmd->fdoutput);
 }
 
 void	closeFiles(t_arg *pipex)
 {
-	close(pipex->cmd1.fdinput);
-	close(pipex->cmd2.fdoutput);
+	if (pipex->cmd1.fdinput >= 0)
+		close(pipex->cmd1.fdinput);
+	if (pipex->cmd2.fdoutput >= 0)
+		close(pipex->cmd2.fdoutput);
 }

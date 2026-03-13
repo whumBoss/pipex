@@ -6,7 +6,7 @@
 /*   By: wihumeau <wihumeau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 18:10:50 by wihumeau          #+#    #+#             */
-/*   Updated: 2026/03/12 16:20:17 by wihumeau         ###   ########.fr       */
+/*   Updated: 2026/03/13 18:45:21 by wihumeau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,53 +97,64 @@ int		child(t_arg *pipex, t_cmd *cmd)
 	if (cmd->fdinput < 0 || cmd->fdoutput < 0)
 	{
 		closePipex(pipex);
-		closeCmd(cmd);
 		freePipex(pipex);
-		freeCmd(cmd);
-		exit(1); // exit code pour ce cas d'erreur???
+		perror("pipe");
+		exit(1); // exit 126 pour les invalid files mais exit 1 pour les files sans permissions??
 	}
 	dup2(cmd->fdinput, STDIN_FILENO);
 	dup2(cmd->fdoutput, STDOUT_FILENO);
 	closePipex(pipex);
-	closeCmd(cmd);
+	if (!cmd || !cmd->args || !cmd->args[0] || !cmd->args[0][0] || !cmd->path)
+	{
+		closePipex(pipex);
+		freePipex(pipex);
+		perror("pipe");
+		exit(127); // exit 126 pour les invalid files mais exit 1 pour les files sans permissions??	
+	}
 	execve(cmd->path, cmd->args, pipex->env);
-	freePipex(pipex); // invalid free
-	freeCmd(cmd); // invalid free
-	exit(errno); // exit code pour ce cas d'erreur???
+	perror(cmd->args[0]);
+	freePipex(pipex);
+	// MODIF VALEUR DE RETOUR
+	if (errno == EACCES)
+		exit(126);
+	exit(127);
 }
 
 void	exec(t_arg *pipex)
 {
-	int		j = 0;
+	int		pid;
 	int		tab_pid[2];
 	int		status;
+	int		exit_code;
 
+	exit_code = 0;
 	tab_pid[0] = -1;
 	tab_pid[1] = -1;
-
 	if (pipe(pipex->pipe) < 0)
 	{
-		ft_printf("Pipex error, pipe creation : %s\n", strerror(errno));
 		closeFiles(pipex);
 		freePipex(pipex);
+		perror("pipe");
 		exit(1);
 	}
 	tab_pid[0] = fork();
+	if (tab_pid[0] == -1)
+		perror("fork");
 	if (tab_pid[0] == 0)
 		child(pipex, &pipex->cmd1);
 	tab_pid[1] = fork();
+	if (tab_pid[1] == -1)
+		perror("fork");
 	if (tab_pid[1] == 0)
 		child(pipex, &pipex->cmd2);
 	closePipex(pipex);
-	freePipex(pipex); // 2 invalid free
-	while (j <= 1)
+	freePipex(pipex);
+	// MODIF WAIT BOUCLE, SORRY J'AVAIS DU CHANGER CA
+	// ON PERD UN PROCESS SI ON ATT LE PREMIER PUIS LE 2EME
+	while ((pid = waitpid(-1, &status, 0)) != -1)
 	{
-		if (j == 1)
-			waitpid(tab_pid[j], &status, 0);
-		else
-			waitpid(tab_pid[j], NULL, 0);
-		j++;
+		if (pid == tab_pid[1])
+			exit_code = WEXITSTATUS(status);
 	}
-	// macro verif le status
-	exit(status);
+	exit(exit_code);
 }

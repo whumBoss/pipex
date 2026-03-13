@@ -70,7 +70,8 @@ test: $(NAME)
 	./$(NAME) Makefile ls wc tests/outfile
 
 hardtest: $(NAME)
-	./$(NAME) Makefile "ls -l -a" wc tests/outfile
+	r./$(NAME) Makefile "ls -l -a" "wc -l" tests/outfile
+	cat tests/outfile
 
 noinfile: $(NAME)
 	./$(NAME) Makefiled "ls -l -a" wc tests/outfile

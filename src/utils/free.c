@@ -16,13 +16,15 @@ void	free_tab(char **tab)
 {
 	int	i;
 
+	if (!tab)
+		return ;
 	i = 0;
 	while (tab[i] != NULL)
 	{
-		free(tab[i]); // invalid free parent et child
+		free(tab[i]);
 		i++;
 	}
-	free(tab); // invalid free child
+	free(tab);
 }
 
 void	free_paths(char *complete_cmd, char **path_tab)
@@ -33,9 +35,9 @@ void	free_paths(char *complete_cmd, char **path_tab)
 
 void	freePipex(t_arg *pipex)
 {
-	free_tab(pipex->cmd1.args); // invalid free parent et child
-	free_tab(pipex->cmd2.args); // invalid free child
-	//free(pipex->cmd1.path); // invalid free parent et child
+	free_tab(pipex->cmd1.args);
+	free_tab(pipex->cmd2.args);
+	free(pipex->cmd1.path);
 	free(pipex->cmd2.path);
 	free(pipex);
 }
