@@ -1,0 +1,25 @@
+Liste de test possible pour pipex
+
+VALGRIND ET FLAGS
+valgrind --leak-check=full
+
+TEST
+./pipex infile.txt "ls" "wc -l" outfile.txt
+
+invalidfile validcmd validcmd validfile
+validfile validcmd validcmd invalidfile
+invalidfile validcmd validcmd invalidfile
+validfile invalidcmd validcmd validfile
+validfile validcmd invalidcmd validfile
+validfile invalidcmd invalidcmd validfile
+
+si cmd == " " ou "/"
+
+TEST VALEUR EXIT
+echo $?
+
+/* BEUG: 
+	TEST TESTEUR: 
+
+	=> mauvaise cmd ou string vide => invalid free
+	j'ai chercher mais je ne crois pas avoir free plusieurs fois, plus on avait deja proteger les free au cas ou
